@@ -51,14 +51,12 @@ class DavCollectionFieldMapping(models.Model):
         "result for the output of the value and record as input"
     )
 
-    @api.multi
     def from_vobject(self, child):
         self.ensure_one()
         if self.mapping_type == "code":
             return self._from_vobject_code(child)
         return self._from_vobject_simple(child)
 
-    @api.multi
     def _from_vobject_code(self, child):
         self.ensure_one()
         context = {
@@ -73,7 +71,6 @@ class DavCollectionFieldMapping(models.Model):
         safe_eval(self.import_code, context, mode="exec", nocopy=True)
         return context.get("result", {})
 
-    @api.multi
     def _from_vobject_simple(self, child):
         self.ensure_one()
         name = self.name.lower()
@@ -115,7 +112,6 @@ class DavCollectionFieldMapping(models.Model):
     def _from_vobject_char_n(self, item):
         return item.family
 
-    @api.multi
     def to_vobject(self, record):
         self.ensure_one()
         if self.mapping_type == "code":
@@ -127,7 +123,6 @@ class DavCollectionFieldMapping(models.Model):
             return result.replace(tzinfo=tz.UTC)
         return result
 
-    @api.multi
     def _to_vobject_code(self, record):
         self.ensure_one()
         context = {
@@ -142,7 +137,6 @@ class DavCollectionFieldMapping(models.Model):
         safe_eval(self.export_code, context, mode="exec", nocopy=True)
         return context.get("result", None)
 
-    @api.multi
     def _to_vobject_simple(self, record):
         self.ensure_one()
         conversion_funcs = [

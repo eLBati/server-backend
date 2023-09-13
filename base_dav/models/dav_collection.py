@@ -58,7 +58,6 @@ class DavCollection(models.Model):
     )
     url = fields.Char(compute="_compute_url")
 
-    @api.multi
     def _compute_tag(self):
         for this in self:
             if this.dav_type == "calendar":
@@ -66,7 +65,6 @@ class DavCollection(models.Model):
             elif this.dav_type == "addressbook":
                 this.tag = "VADDRESSBOOK"
 
-    @api.multi
     def _compute_url(self):
         base_url = self.env["ir.config_parameter"].get_param("web.base.url")
         for this in self:
@@ -87,19 +85,16 @@ class DavCollection(models.Model):
             "user": self.env.user,
         }
 
-    @api.multi
     def _eval_domain(self):
         self.ensure_one()
         return list(tools.safe_eval(self.domain, self._eval_context()))
 
-    @api.multi
     def eval(self):
         if not self:
             return self.env["unknown"]
         self.ensure_one()
         return self.env[self.model_id.model].search(self._eval_domain())
 
-    @api.multi
     def get_record(self, components):
         self.ensure_one()
         collection_model = self.env[self.model_id.model]
@@ -108,7 +103,6 @@ class DavCollection(models.Model):
         domain = [(field_name, "=", components[-1])] + self._eval_domain()
         return collection_model.search(domain, limit=1)
 
-    @api.multi
     def from_vobject(self, item):
         self.ensure_one()
 
@@ -135,7 +129,6 @@ class DavCollection(models.Model):
 
         return result
 
-    @api.multi
     def to_vobject(self, record):
         self.ensure_one()
         result = None
@@ -167,7 +160,6 @@ class DavCollection(models.Model):
     def _split_path(self, path):
         return list(filter(None, os.path.normpath(path or "").strip("/").split("/")))
 
-    @api.multi
     def dav_list(self, collection, path_components):
         self.ensure_one()
 
@@ -212,7 +204,6 @@ class DavCollection(models.Model):
             result.append("/" + "/".join(path_components + [uuid]))
         return result
 
-    @api.multi
     def dav_delete(self, collection, components):
         self.ensure_one()
 
@@ -222,7 +213,6 @@ class DavCollection(models.Model):
         else:
             self.get_record(components).unlink()
 
-    @api.multi
     def dav_upload(self, collection, href, item):
         self.ensure_one()
 
@@ -252,7 +242,6 @@ class DavCollection(models.Model):
             last_modified=self._odoo_to_http_datetime(record.write_date),
         )
 
-    @api.multi
     def dav_get(self, collection, href):
         self.ensure_one()
 
