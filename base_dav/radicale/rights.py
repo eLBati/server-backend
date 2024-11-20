@@ -4,11 +4,7 @@
 from .collection import Collection
 
 try:
-    from radicale.rights import (
-        AuthenticatedRights,
-        OwnerOnlyRights,
-        OwnerWriteRights,
-    )
+    from radicale.rights import AuthenticatedRights, OwnerOnlyRights, OwnerWriteRights
 except ImportError:
     AuthenticatedRights = OwnerOnlyRights = OwnerWriteRights = None
 

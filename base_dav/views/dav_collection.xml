@@ -18,7 +18,11 @@
                 <group>
                     <field name="name" />
                     <field name="dav_type" />
-                    <field name="url" widget="url" invisible="url == False" />
+                    <field
+                        name="url"
+                        widget="url"
+                        attrs="{'invisible': [('url', '=', False)]}"
+                    />
                 </group>
                 <group string="Access">
                     <field name="model_id" />
@@ -58,8 +62,14 @@
                     <field name="name" />
                     <field name="mapping_type" />
                     <field name="field_id" domain="[('model_id', '=', model_id)]" />
-                    <field name="import_code" invisible="mapping_type != 'code'" />
-                    <field name="export_code" invisible="mapping_type != 'code'" />
+                    <field
+                        name="import_code"
+                        attrs="{'invisible': [('mapping_type', '!=', 'code')]}"
+                    />
+                    <field
+                        name="export_code"
+                        attrs="{'invisible': [('mapping_type', '!=', 'code')]}"
+                    />
                 </group>
             </form>
         </field>
